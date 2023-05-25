@@ -2,7 +2,7 @@
 
 ## Database Schema Design
 
-`<TBA>`
+
 
 ## API Documentation
 
@@ -50,7 +50,7 @@ Returns the information about the current user that is logged in.
 * Require Authentication: true
 * Request
   * Method: GET
-  * URL: "/user"
+  * URL: "/user/userId"
   * Body: none
 
 * Successful Response when there is a logged in user
@@ -1386,7 +1386,7 @@ Return spots filtered by query parameters.
 * Require Authentication: false
 * Request
   * Method: GET
-  * URL: ??
+  * URL: "page=?/size=?/......???"
   * Query Parameters
     * page: integer, minimum: 1, maximum: 10, default: 1
     * size: integer, minimum: 1, maximum: 20, default: 20
