@@ -2,6 +2,8 @@
 
 ## Database Schema Design
 
+![Untitled](https://github.com/Korozami/AirClone/assets/104758287/6d1c77ac-6ba3-4301-99cf-8a81607e1419)
+
 
 ## API Documentation
 
