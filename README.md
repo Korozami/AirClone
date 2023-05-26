@@ -92,7 +92,7 @@ information.
 * Require Authentication: false
 * Request
   * Method: POST?
-  * URL: "/login"
+  * URL: "/login"?
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -158,7 +158,7 @@ user's information.
 * Require Authentication: false
 * Request
   * Method: POST
-  * URL: "/login/user"
+  * URL: "/user/login"
   * Headers:
     * Content-Type: application/json
   * Body:
