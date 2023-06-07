@@ -2,7 +2,8 @@
 
 ## Database Schema Design
 
-![Untitled](https://github.com/Korozami/AirClone/assets/104758287/d28f6941-bdb8-43be-ba94-7da815f88899)
+![Untitled (1)](https://github.com/Korozami/AirClone/assets/104758287/7d5f657b-9de4-486c-a670-66d538ca6e06)
+
 
 
 
@@ -52,7 +53,7 @@ Returns the information about the current user that is logged in.
 * Require Authentication: true
 * Request
   * Method: GET
-  * URL: "/user/userId"
+  * URL: "/users/:userId"
   * Body: none
 
 * Successful Response when there is a logged in user
@@ -159,7 +160,7 @@ user's information.
 * Require Authentication: false
 * Request
   * Method: POST
-  * URL: "/login/signup"
+  * URL: "/signup"
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -249,7 +250,7 @@ Returns all the spots.
 * Require Authentication: false
 * Request
   * Method: GET
-  * URL: "/spots"
+  * URL: "/spots/:userId"
   * Body: none
 
 * Successful Response
@@ -636,7 +637,7 @@ Returns all the reviews written by the current user.
 * Require Authentication: true
 * Request
   * Method: GET
-  * URL: "/user/:userid/reviews" mybe "/reviews/user/:userId"
+  * URL: "/reviews/:userId"
   * Body: none
 
 * Successful Response
@@ -692,7 +693,7 @@ Returns all the reviews that belong to a spot specified by id.
 * Require Authentication: false
 * Request
   * Method: GET
-  * URL: "/spots/:spotid/review"
+  * URL: "/reviews/:spotId"
   * Body: none
 
 * Successful Response
@@ -984,7 +985,7 @@ Return all the bookings that the current user has made.
 * Require Authentication: true
 * Request
   * Method: GET
-  * URL: "/user/bookings"
+  * URL: "/bookings/:userId"
   * Body: none
 
 * Successful Response
@@ -1029,7 +1030,7 @@ Return all the bookings for a spot specified by id.
 * Require Authentication: true
 * Request
   * Method: GET
-  * URL: "/spots/:spotid/booking"
+  * URL: "/bookings/:spotId"
   * Body: none
 
 * Successful Response: If you ARE NOT the owner of the spot.
