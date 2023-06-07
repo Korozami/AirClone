@@ -2,7 +2,8 @@
 
 ## Database Schema Design
 
-![Untitled](https://github.com/Korozami/AirClone/assets/104758287/d28f6941-bdb8-43be-ba94-7da815f88899)
+![Untitled (1)](https://github.com/Korozami/AirClone/assets/104758287/7d5f657b-9de4-486c-a670-66d538ca6e06)
+
 
 
 
