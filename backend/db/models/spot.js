@@ -38,14 +38,18 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
-        isFloat: true
+        isFloat: true,
+        min: -90,
+        max: 90
       }
     },
     lng: {
       type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
-        isFloat: true
+        isFloat: true,
+        min: -180,
+        max: 180
       }
     },
     name: {
