@@ -32,14 +32,50 @@ module.exports = (sequelize, DataTypes) => {
     },
     country: {
       type: DataTypes.STRING,
+      allowNull: false,
     },
-    lat: DataTypes.INTEGER,
-    lng: DataTypes.INTEGER,
-    name: DataTypes.STRING,
-    description: DataTypes.STRING,
-    price: DataTypes.INTEGER,
-    avgRating: DataTypes.INTEGER,
-    previewImage: DataTypes.STRING
+    lat: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        isFloat: true
+      }
+    },
+    lng: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        isFloat: true
+      }
+    },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    description: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    price: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        len: [1,100000]
+      }
+    },
+    avgRating: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        len: [1, 5]
+      }
+    },
+    previewImage: {
+      type: DataTypes.STRING,
+      validate: {
+        isUrl: true
+      }
+    }
   }, {
     sequelize,
     modelName: 'Spot',
