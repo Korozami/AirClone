@@ -60,14 +60,16 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
-        len: [1,100000]
+        min: 0,
+        max: 10000000
       }
     },
     avgRating: {
       type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
-        len: [1, 5]
+        min: 0,
+        max: 5
       }
     },
     previewImage: {
