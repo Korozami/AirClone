@@ -5,6 +5,18 @@ module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
       // define association here
+      User.hasMany(
+        models.Booking,
+        { foreignKey: 'userBooking', onDelete: 'CASCADE', hooks: true }
+      );
+      User.hasMany(
+        models.Spot,
+        { foreignKey: 'ownerId', onDelete: 'CASCADE', hooks: true }
+      );
+      User.hasMany(
+        models.Review,
+        { foreignKey: 'user_id', onDelete: 'CASCADE', hooks: true }
+      );
     }
   };
 
