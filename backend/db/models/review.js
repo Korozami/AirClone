@@ -11,6 +11,18 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Review.hasMany(
+        models.reviewImages,
+        { foreignKey: 'review_id', onDelete: 'CASCADE', hooks: true }
+      );
+      Review.belongsTo(
+        models.User,
+        { foreignKey: 'user_id' }
+      );
+      Review.belongsTo(
+        models.Spot,
+        { foreignKey: 'spotId' }
+      );
     }
   }
   Review.init({

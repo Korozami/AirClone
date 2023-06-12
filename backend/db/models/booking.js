@@ -11,6 +11,15 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Booking.belongsTo(
+        models.User,
+        { foreignKey: 'userBooking' }
+      );
+
+      Booking.belongsTo (
+        models.Spot,
+        { foreignKey: 'spotBooking' }
+      );
     }
   }
   Booking.init({
@@ -21,7 +30,15 @@ module.exports = (sequelize, DataTypes) => {
     spotBooking: {
       type: DataTypes.INTEGER,
       allowNull: false
-    }
+    },
+    startDate: {
+      type: DataTypes.DATE,
+      allowNull: false
+    },
+    endDate: {
+      type: DataTypes.DATE,
+      allowNull: false
+    },
   }, {
     sequelize,
     modelName: 'Booking',
