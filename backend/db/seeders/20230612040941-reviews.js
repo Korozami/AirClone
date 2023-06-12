@@ -17,7 +17,7 @@ module.exports = {
        spotId: 1,
        reviews: 'This was an awesome spot!',
        stars: 5,
-       createAt: "2021-11-19 20:39:36",
+       createdAt: "2021-11-19 20:39:36",
        updatedAt: "2021-11-19 20:39:36"
      },
      {
@@ -25,7 +25,7 @@ module.exports = {
       spotId: 2,
       reviews: 'This was aight',
       stars: 3,
-      createAt: "2021-11-19 20:39:36",
+      createdAt: "2021-11-19 20:39:36",
       updatedAt: "2021-11-19 20:39:36"
     },
     {
@@ -33,7 +33,7 @@ module.exports = {
       spotId: 3,
       reviews: 'This is my spot and my spot only',
       stars: 5,
-      createAt: "2021-11-19 20:39:36",
+      createdAt: "2021-11-19 20:39:36",
       updatedAt: "2021-11-19 20:39:36"
     },
     ], {});
