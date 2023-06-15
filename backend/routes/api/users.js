@@ -1,13 +1,22 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const { check } = require('express-validator');
+const  sequelize  = require('sequelize');
 const { handleValidationErrors } = require('../../utils/validation');
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
-const { User } = require('../../db/models');
+const { User, Spot, Review, Booking, SpotImages, ReviewImages } = require('../../db/models');
 
 const router = express.Router();
 
 const validateSignup = [
+  check('firstName')
+  .exists({ checkFalsy: true })
+  .isLength( { min: 2 })
+  .withMessage('Please provide a first name'),
+  check('lastName')
+  .exists({ checkFalsy: true })
+  .isLength( { min: 2 })
+  .withMessage('Please provide a last name'),
   check('email')
     .exists({ checkFalsy: true })
     .isEmail()
@@ -50,5 +59,6 @@ router.post(
       });
     }
   );
+
 
 module.exports = router;

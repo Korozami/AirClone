@@ -22,7 +22,6 @@ module.exports = {
         name: "App Academy",
         description: "Place where web developers are created",
         price: 123,
-        avgRating: 4.5,
         previewImage: "image url",
         createdAt: "2021-11-19 20:39:36",
         updatedAt: "2021-11-19 20:39:36"
@@ -38,7 +37,6 @@ module.exports = {
         name: "App Academy",
         description: "Place where web developers are created maybe",
         price: 123,
-        avgRating: 4.5,
         previewImage: "image url",
         createdAt: "2021-11-19 20:39:36",
         updatedAt: "2021-11-19 20:39:36"
@@ -54,7 +52,6 @@ module.exports = {
         name: "Maybe my place",
         description: "Place where I sleep and slack off",
         price: 999,
-        avgRating: 4.9,
         previewImage: "image url",
         createdAt: "2021-11-19 20:39:36",
         updatedAt: "2021-11-19 20:39:36"

@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Review.hasMany(
-        models.reviewImages,
+        models.ReviewImages,
         { foreignKey: 'review_id', onDelete: 'CASCADE', hooks: true }
       );
       Review.belongsTo(
@@ -36,10 +36,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     reviews: {
       type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: true
-      }
+      allowNull: false
     },
     stars: {
       type: DataTypes.INTEGER,

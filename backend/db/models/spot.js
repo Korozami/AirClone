@@ -19,13 +19,10 @@ module.exports = (sequelize, DataTypes) => {
         models.SpotImages,
         { foreignKey: 'spot_id', onDelete: 'CASCADE', hooks: true }
       );
-      Spot.hasMany(
-        models.SpotImages,
-        { foreignKey: 'preview', onDelete: 'CASCADE', hooks: true }
-      );
+
       Spot.belongsTo(
         models.User,
-        { foreignKey: 'ownerId' }
+        { foreignKey: 'ownerId', as: 'Owner' }
       );
       Spot.hasMany(
         models.Review,
@@ -86,14 +83,6 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         min: 0,
         max: 10000000
-      }
-    },
-    avgRating: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      validate: {
-        min: 0,
-        max: 5
       }
     },
     previewImage: {
