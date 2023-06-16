@@ -39,7 +39,7 @@ const validateSpot = [
 ];
 
 const validateReview = [
-    check('review')
+    check('reviews')
     .exists( { checkFalsy: true })
     .withMessage('Review text is required'),
     check('stars')
@@ -206,7 +206,7 @@ router.put('/:spotId', validateSpot, requireAuth, async (req, res, next) => {
 
     if(!spot) {
         const err = new Error("Spot couldn't be found");
-        err.status(404);
+        err.status = 404;
         return next(err);
     };
 
@@ -242,8 +242,8 @@ router.delete('/:spotId' , requireAuth, async (req, res, next) => {
 });
 
 router.get('/:spotId/reviews', requireAuth, async (req, res, next) => {
-    const spodId = req.params.spotId;
-    const spot = await Spot.findByPk(spodId);
+    const spotId = req.params.spotId;
+    const spot = await Spot.findByPk(spotId);
     if(!spot) {
         const err = new Error("Spot couldn't be found");
         err.status = 404;
@@ -251,7 +251,7 @@ router.get('/:spotId/reviews', requireAuth, async (req, res, next) => {
     };
 
     const reviews = await Review.findAll({
-        where: { spodId },
+        where: { spotId },
         include: [
             {
                 model: User,
@@ -268,9 +268,9 @@ router.get('/:spotId/reviews', requireAuth, async (req, res, next) => {
 });
 
 router.post('/:spotId/reviews', requireAuth, validateReview, async (req, res, next) => {
-    const spodId = req.params.spotId;
-    const userId = req.user.id;
-    const spot = await Spot.findByPk(spodId);
+    const spotId = req.params.spotId;
+    const user_id = req.user.id;
+    const spot = await Spot.findByPk(spotId);
     const { reviews, stars } = req.body;
     if(!spot) {
         const err = new Error("Spot couldn't be found");
@@ -278,15 +278,16 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async (req, res, ne
         return next(err);
     };
     const reviewExist = await Review.findOne({
-        where: { spodId, userId}
+        where: { spotId, user_id}
     });
     if(reviewExist) {
         const err = new Error("User already has a review for this spot");
-        err.status(500);
+        err.status = 500;
         return next(err);
     };
     const newReview = await Review.create({
-        spodId: spodId,
+        user_id: user_id,
+        spotId: spotId,
         reviews,
         stars
     });
