@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const sequelize  = require('sequelize');
+// const sequelize  = require('sequelize');
 const { Op, Sequelize } = require('sequelize');
 const { User, Spot, Review, SpotImages, Booking, ReviewImages } = require('../../db/models');
 const { requireAuth } = require('../../utils/auth');
@@ -50,20 +50,73 @@ const validateReview = [
 ];
 
 
-router.get('/', async (req, res) => {
+router.get('/', async (req, res, next) => {
 
-    let avgRating = sequelize.fn('AVG', sequelize.col('Reviews.stars'));
+    let { page, size, minLat, maxLat, minLng, maxLng ,minPrice, maxPrice } = req.query;
+
+    page = parseInt(page);
+    size = parseInt(size);
+
+    if(Number.isNaN(page) || page <= 0 || page > 10) {
+        page = 1;
+    }
+
+    if(Number.isNaN(size) || size <= 0 || size > 20) {
+        size = 20;
+    }
+
+    const errors = {};
+
+    if (minLat && isNaN(minLat)) {
+        errors.minLat = "Minimum latitude is invalid";
+    }
+    if (maxLat && isNaN(maxLat)) {
+        errors.maxLat = "Maximum latitude is invalid";
+    }
+    if (minLng && isNaN(minLng)) {
+        errors.minLng = "Minimum longitude is invalid";
+    }
+    if (maxLng && isNaN(maxLng)) {
+        errors.maxLng = "Maximum longitude is invalid";
+    }
+    if (minPrice && isNaN(minPrice) || minPrice < 0) {
+        errors.minPrice = "Minimum price must be greater than or equal to 0";
+    }
+    if (maxPrice && isNaN(maxPrice) || maxPrice < 0) {
+        errors.maxPrice = "Maximum price must be greater than or equal to 0";
+    }
+
+    if (Object.keys(errors).length > 0) {
+        const err = new Error("Bad Request");
+        err.status = 400;
+        err.errors = errors;
+        return next(err);
+    }
+
+    minLat = parseFloat(minLat) || -90;
+    maxLat = parseFloat(maxLat) || 90;
+    minLng = parseFloat(minLat) || -180;
+    maxLng = parseFloat(maxLng) || 180;
+    minPrice = parseFloat(minPrice) || 0;
+    maxPrice = parseFloat(maxPrice) || 1000;
+
+
+    let avgRating = Sequelize.fn('AVG', Sequelize.cast(Sequelize.col('Reviews.stars'), 'FLOAT'));
 
     const spots = await Spot.findAll({
 
         group: ['Spot.Id'],
 
-        include: [
-            {
+        offset: (page - 1) * size,
+        limit: size,
+
+        include: {
                 model: Review,
+                duplicating: false,
+                required: false,
                 attributes: []
-            }
-        ],
+            },
+
         attributes: [
             'id',
             'ownerId',
@@ -79,14 +132,18 @@ router.get('/', async (req, res) => {
             'createdAt',
             'updatedAt',
             [avgRating, 'avgRating']
-        ]
+        ],
 
     });
 
-    return res.status(200).json(spots);
+    return res.status(200).json({
+        Spots: spots,
+        page,
+        size,
+    });
 });
 
-router.get('/current', requireAuth, async (req, res) => {
+router.get('/current', requireAuth, async (req, res, next) => {
     const userId = req.user.id;
     const spots = await Spot.findAll({
       where: { ownerId: userId },
@@ -98,7 +155,7 @@ router.get('/current', requireAuth, async (req, res) => {
       ],
       attributes: {
         include: [
-          [sequelize.fn('AVG', sequelize.col('Reviews.stars')), 'avgRating']
+          [Sequelize.fn('AVG', Sequelize.col('Reviews.stars')), 'avgRating']
         ]
       },
       group: ['Spot.id']
@@ -126,8 +183,8 @@ router.get('/:spotId', requireAuth, async (req, res, next) => {
             'price',
             'createdAt',
             'updatedAt',
-            [sequelize.fn('AVG', sequelize.col('Reviews.stars')), 'avgRating'],
-            [sequelize.fn('AVG', sequelize.col('Reviews.id')), 'numReviews']
+            [Sequelize.fn('AVG', Sequelize.col('Reviews.stars')), 'avgRating'],
+            [Sequelize.fn('AVG', Sequelize.col('Reviews.id')), 'numReviews']
         ],
     },
         include: [
@@ -297,21 +354,21 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async (req, res, ne
 });
 
 router.get('/:spotId/bookings', requireAuth, async (req, res, next) => {
-    const spotId = req.params.spotId;
-    const spot = await Spot.findByPk(spotId);
+    const spotBooking = req.params.spotId;
+    const spot = await Spot.findByPk(spotBooking);
     if(!spot) {
         const err = new Error("Spot couldn't be found");
         err.status = 404;
         return next(err);
     };
     const ownerbookings = await Booking.findAll({
-        where: {spotId},
+        where: {spotBooking},
         include: {
             model: User,
             attributes: ['firstName', 'lastName'],
         },
     });
-    const booking = await Booking.findByPk(spotId);
+    const booking = await Booking.findByPk(spotBooking);
 
     if(req.user.id === spot.ownerId) {
         return res.status(200).json({Bookings: ownerbookings})
@@ -322,9 +379,9 @@ router.get('/:spotId/bookings', requireAuth, async (req, res, next) => {
 });
 
 router.post('/:spotId/bookings', requireAuth, async (req, res, next) => {
-    const spotId = req.params.spotId;
+    const spotBooking = req.params.spotId;
     const user_id = req.user.id;
-    const spot = await Spot.findByPk(spotId);
+    const spot = await Spot.findByPk(spotBooking);
     const { startDate, endDate } = req.body;
     if(!spot) {
         const err = new Error("Spot couldn't be found");
@@ -338,7 +395,7 @@ router.post('/:spotId/bookings', requireAuth, async (req, res, next) => {
     };
     const existBooking = await Booking.findOne({
         where: {
-            spotId: spot.id,
+            spotBooking: spot.id,
             [Op.or]:[
                 {
                     startDate: {
@@ -373,7 +430,7 @@ router.post('/:spotId/bookings', requireAuth, async (req, res, next) => {
 
     const newBooking = await Booking.create({
         userBooking: user_id,
-        spotBooking: spotId,
+        spotBooking: spotBooking,
         startDate,
         endDate
     });

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const sequelize  = require('sequelize');
+const { Op, sequelize}  = require('sequelize');
 const { User, Spot, Review, SpotImages, Booking, ReviewImages } = require('../../db/models')
 const { requireAuth } = require('../../utils/auth');
 const { check } = require('express-validator');
@@ -21,10 +21,10 @@ router.get('/current', requireAuth, async (req, res, next) => {
 });
 
 router.put('/:bookingsId', requireAuth, async (req, res, next) => {
-    const bookingId = req.params.bookingsId;
+    const id = req.params.bookingsId;
     const { startDate, endDate } = req.body;
 
-    const booking = await Booking.findByPk(bookingId);
+    const booking = await Booking.findByPk(id);
 
     if(!booking) {
         const err = new Error("Booking couldn't be found");
@@ -45,27 +45,25 @@ router.put('/:bookingsId', requireAuth, async (req, res, next) => {
         return next(err);
     };
 
-    const spotId = booking.spotId;
+    const spotBooking = booking.spotBooking;
 
-    const booked = = await Booking.findOne({
+    const booked = await Booking.findOne({
         where: {
-            spotId,
+            spotBooking,
             [Op.or]: [
                 {
                     startDate: {
                         [Op.lte]: endDate,
                     },
                     endDate: {
-                        endDate: {
-                            [Op.gte]: startDate,
-                        },
+                        [Op.gte]: startDate,
                     },
                 },
             ],
         },
     });
 
-    if(booked && booked.id !== bookingId) {
+    if(booked && booked.id !== id) {
         const err = new Error("Sorry this spot is already booked for the specified date");
         err.status = 403;
         err.errors = {
