@@ -8,7 +8,7 @@ options.tableName = "Users";
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    return queryInterface.createTable("Users", {
+    return queryInterface.createTable(options, {
       id: {
         allowNull: false,
         autoIncrement: true,
