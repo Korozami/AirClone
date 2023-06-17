@@ -93,10 +93,10 @@ router.get('/', async (req, res, next) => {
         return next(err);
     }
 
-    minLat = parseFloat(minLat) || -90;
-    maxLat = parseFloat(maxLat) || 90;
-    minLng = parseFloat(minLat) || -180;
-    maxLng = parseFloat(maxLng) || 180;
+    minLat = parseFloat(minLat) || -1000;
+    maxLat = parseFloat(maxLat) || 1000;
+    minLng = parseFloat(minLat) || -1000;
+    maxLng = parseFloat(maxLng) || 1000;
     minPrice = parseFloat(minPrice) || 0;
     maxPrice = parseFloat(maxPrice) || 1000;
 
@@ -106,6 +106,12 @@ router.get('/', async (req, res, next) => {
     const spots = await Spot.findAll({
 
         group: ['Spot.Id'],
+
+        where: {
+            lat: { [Op.between]: [minLat, maxLat]},
+            lng: { [Op.between]: [minLng, maxLng]},
+            price: { [Op.between]: [minPrice, maxPrice]},
+        },
 
         offset: (page - 1) * size,
         limit: size,
@@ -131,7 +137,8 @@ router.get('/', async (req, res, next) => {
             'price',
             'createdAt',
             'updatedAt',
-            [avgRating, 'avgRating']
+            [avgRating, 'avgRating'],
+            'previewImage'
         ],
 
     });
