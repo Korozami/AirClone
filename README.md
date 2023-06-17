@@ -53,7 +53,7 @@ Returns the information about the current user that is logged in.
 * Require Authentication: true
 * Request
   * Method: GET
-  * URL: "/users/:userId"
+  * URL: "/session"
   * Body: none
 
 * Successful Response when there is a logged in user
@@ -94,7 +94,7 @@ information.
 * Require Authentication: false
 * Request
   * Method: POST
-  * URL: "/login"
+  * URL: "/session"
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -160,7 +160,7 @@ user's information.
 * Require Authentication: false
 * Request
   * Method: POST
-  * URL: "/signup"
+  * URL: "/user"
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -250,7 +250,7 @@ Returns all the spots.
 * Require Authentication: false
 * Request
   * Method: GET
-  * URL: "/spots/:userId"
+  * URL: "/spots"
   * Body: none
 
 * Successful Response
@@ -290,7 +290,7 @@ Returns all the spots owned (created) by the current user.
 * Require Authentication: true
 * Request
   * Method: GET
-  * URL: "/user/:userID/spots"
+  * URL: "/spots/current"
   * Body: none
 
 * Successful Response
@@ -637,7 +637,7 @@ Returns all the reviews written by the current user.
 * Require Authentication: true
 * Request
   * Method: GET
-  * URL: "/reviews/:userId"
+  * URL: "/reviews/current"
   * Body: none
 
 * Successful Response
@@ -693,7 +693,7 @@ Returns all the reviews that belong to a spot specified by id.
 * Require Authentication: false
 * Request
   * Method: GET
-  * URL: "/reviews/:spotId"
+  * URL: "/spots/:spotId/reviews"
   * Body: none
 
 * Successful Response
@@ -985,7 +985,7 @@ Return all the bookings that the current user has made.
 * Require Authentication: true
 * Request
   * Method: GET
-  * URL: "/bookings/:userId"
+  * URL: "/bookings/current"
   * Body: none
 
 * Successful Response
@@ -1030,7 +1030,7 @@ Return all the bookings for a spot specified by id.
 * Require Authentication: true
 * Request
   * Method: GET
-  * URL: "/bookings/:spotId"
+  * URL: "/spots/:spotId/bookings"
   * Body: none
 
 * Successful Response: If you ARE NOT the owner of the spot.
@@ -1320,7 +1320,7 @@ Delete an existing image for a Spot.
 * Require proper authorization: Spot must belong to the current user
 * Request
   * Method: DELETE
-  * URL: "spots/:spotid/images/:imageid"
+  * URL: "spots-images/:spotimageid"
   * Body: none
 
 * Successful Response
@@ -1355,7 +1355,7 @@ Delete an existing image for a Review.
 * Require proper authorization: Review must belong to the current user
 * Request
   * Method: DELETE
-  * URL: "reviews/:reviewid/images/:imageid"
+  * URL: "review-images/:imageid"
   * Body: none
 
 * Successful Response
