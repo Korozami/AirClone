@@ -15,10 +15,6 @@ module.exports = (sequelize, DataTypes) => {
         models.Spot,
         { foreignKey: 'spot_id' }
       );
-      SpotImages.belongsTo(
-        models.Spot,
-        { foreignKey: 'preview' }
-      );
     }
   }
   SpotImages.init({
@@ -34,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     preview: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.BOOLEAN,
       allowNull: false
     }
   }, {
