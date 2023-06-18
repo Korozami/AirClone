@@ -40,7 +40,7 @@ const validateSpot = [
 ];
 
 const validateReview = [
-    check('reviews')
+    check('review')
     .exists( { checkFalsy: true })
     .withMessage('Review text is required'),
     check('stars')
