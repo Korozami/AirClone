@@ -9,7 +9,7 @@ const { handleValidationErrors } = require('../../utils/validation');
 router.get('/current', requireAuth, async (req, res, next) => {
     const userId = req.user.id;
     const bookings = await Booking.findAll({
-        where: { userBooking: userId },
+        where: { userId: userId },
         include: [
             {
                 model: Spot,
@@ -45,11 +45,11 @@ router.put('/:bookingsId', requireAuth, async (req, res, next) => {
         return next(err);
     };
 
-    const spotBooking = booking.spotBooking;
+    const spotId = booking.spotId;
 
     const booked = await Booking.findOne({
         where: {
-            spotBooking,
+            spotId,
             [Op.or]: [
                 {
                     startDate: {

@@ -6,9 +6,9 @@ const { User, Spot, Review, SpotImages, Booking, ReviewImages } = require('../..
 const { requireAuth } = require('../../utils/auth');
 
 router.delete('/:id', requireAuth, async (req, res, next) => {
-    const spot_id = req.params.id;
+    const id = req.params.id;
 
-    const spotImage = await SpotImages.findByPk(spot_id);
+    const spotImage = await SpotImages.findByPk(id);
 
     if(!spotImage) {
         const err = new Error("Spot Image couldn't be found");

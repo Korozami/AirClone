@@ -12,24 +12,24 @@ module.exports = {
   async up (queryInterface, Sequelize) {
       await queryInterface.bulkInsert(options, [
         {
-          userBooking: 2,
-          spotBooking: 1,
+          userId: 2,
+          spotId: 1,
           startDate: "2021-11-19",
           endDate: "2021-11-20",
           createdAt: "2021-11-19 20:39:36",
           updatedAt: "2021-11-19 20:39:36"
         },
         {
-          userBooking: 1,
-          spotBooking: 2,
+          userId: 1,
+          spotId: 2,
           startDate: "2021-11-19",
           endDate: "2021-11-20",
           createdAt: "2021-11-19 20:39:36",
           updatedAt: "2021-11-19 20:39:36"
         },
         {
-          userBooking: 3,
-          spotBooking: 3,
+          userId: 3,
+          spotId: 3,
           startDate: "2021-11-19",
           endDate: "2021-11-20",
           createdAt: "2021-11-19 20:39:36",

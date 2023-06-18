@@ -16,11 +16,11 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      userBooking: {
+      userId: {
         type: Sequelize.INTEGER,
         allowNull: false
       },
-      spotBooking: {
+      spotId: {
         type: Sequelize.INTEGER,
         allowNull: false
       },
