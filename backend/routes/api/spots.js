@@ -261,7 +261,7 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async (req, res, ne
     const spotId = req.params.spotId;
     const user_id = req.user.id;
     const spot = await Spot.findByPk(spotId);
-    const { reviews, stars } = req.body;
+    const { review, stars } = req.body;
     if(!spot) {
         const err = new Error("Spot couldn't be found");
         err.status = 404;
@@ -278,7 +278,7 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async (req, res, ne
     const newReview = await Review.create({
         user_id: user_id,
         spotId: spotId,
-        reviews,
+        review,
         stars
     });
 

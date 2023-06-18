@@ -15,7 +15,7 @@ module.exports = {
       {
        user_id: 1,
        spotId: 1,
-       reviews: 'This was an awesome spot!',
+       review: 'This was an awesome spot!',
        stars: 5,
        createdAt: "2021-11-19 20:39:36",
        updatedAt: "2021-11-19 20:39:36"
@@ -23,7 +23,7 @@ module.exports = {
      {
       user_id: 2,
       spotId: 2,
-      reviews: 'This was aight',
+      review: 'This was aight',
       stars: 3,
       createdAt: "2021-11-19 20:39:36",
       updatedAt: "2021-11-19 20:39:36"
@@ -31,7 +31,7 @@ module.exports = {
     {
       user_id: 3,
       spotId: 3,
-      reviews: 'This is my spot and my spot only',
+      review: 'This is my spot and my spot only',
       stars: 5,
       createdAt: "2021-11-19 20:39:36",
       updatedAt: "2021-11-19 20:39:36"

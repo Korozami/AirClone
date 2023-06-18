@@ -7,7 +7,7 @@ const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 
 const validateReview = [
-    check('reviews')
+    check('review')
     .exists( { checkFalsy: true })
     .withMessage('Review text is required'),
     check('stars')
@@ -65,22 +65,22 @@ router.post('/:reviewId/images', requireAuth, async(req, res, next) => {
 
 router.put('/:reviewId', requireAuth, validateReview, async (req, res, next) => {
     const id = req.params.reviewId;
-    const { reviews, stars } = req.body;
+    const { review, stars } = req.body;
 
-    const review = await Review.findByPk(id);
+    const reviews = await Review.findByPk(id);
 
-    if(!review) {
+    if(!reviews) {
         const err = new Error("Review couldn't be found");
         err.status = 404;
         return next(err);
     };
 
-    review.reviews = reviews;
-    review.stars = stars;
+    reviews.review = review;
+    reviews.stars = stars;
 
-    await review.save();
+    await reviews.save();
 
-    return res.status(200).json(review);
+    return res.status(200).json(reviews);
 });
 
 router.delete('/:reviewId', requireAuth, async (req, res, next) => {
