@@ -26,11 +26,15 @@ router.get('/current', requireAuth, async (req, res) => {
                 attributes: ["id", "firstName", "lastName",]
             },
             {
+                model: Spot,
+                attributes: ["id", "ownerId", "address", "city", "state", "country", "lat", "lng", "name", "price", "previewImage"],
+            },
+            {
                 model: ReviewImages,
                 attributes: ["review_id", "url"],
             }
         ],
-        group: ['ReviewImages.id']
+        group: ['User.id','Spot.id','ReviewImages.id']
     });
 
     return res.status(200).json({ Reviews: reviews })
@@ -39,48 +43,46 @@ router.get('/current', requireAuth, async (req, res) => {
 router.post('/:reviewId/images', requireAuth, async(req, res, next) => {
     const review_id = req.params.reviewId;
     const { url } = req.body;
-    if(!review_id) {
-        const err = new Error("Review couldn't be found");
-        err.status = 404;
-        return next(err);
-    };
+    const user = req.user;
 
-    const imageAmount = await ReviewImages.count({
-        where: { review_id }
-    });
+    const review = await Review.findByPk(review_id);
 
-    if(imageAmount > 10) {
-        const err = new Error("Maximum number of images for this resource was reached");
-        err.status = 403;
-        return next(err);
-    }
-
-    const newImage = await ReviewImages.create({
-        review_id: review_id,
-        url
-    });
-
-    return res.status(200).json(newImage);
+    if(review) {
+        if(user.id === review.user_id) {
+            const imageAmount = await ReviewImages.count({
+                where: { review_id }
+            });
+            if(imageAmount > 10) {
+                const err = new Error("Maximum number of images for this resource was reached");
+                err.status = 403;
+                return next(err);
+            }
+            const newImage = await ReviewImages.create({
+                review_id: review_id,
+                url
+            });
+            return res.status(200).json(newImage);
+        } else return res.status(403).json({ message: "Forbidden"});
+    } else return res.status(404).json({ message: "Review couldn't be found "});
 });
 
 router.put('/:reviewId', requireAuth, validateReview, async (req, res, next) => {
     const id = req.params.reviewId;
     const { review, stars } = req.body;
+    const user = req.user;
 
     const reviews = await Review.findByPk(id);
+    if(reviews) {
+        if(user.id === reviews.user_id) {
+            reviews.review = review;
+            reviews.stars = stars;
 
-    if(!reviews) {
-        const err = new Error("Review couldn't be found");
-        err.status = 404;
-        return next(err);
-    };
+            await reviews.save();
 
-    reviews.review = review;
-    reviews.stars = stars;
+            return res.status(200).json(reviews);
+        } else return res.status(403).json ({ message: "Forbidden!"});
+    } else return res.status(404).json({ message: "Review couldn't be found"})
 
-    await reviews.save();
-
-    return res.status(200).json(reviews);
 });
 
 router.delete('/:reviewId', requireAuth, async (req, res, next) => {
@@ -97,8 +99,8 @@ router.delete('/:reviewId', requireAuth, async (req, res, next) => {
 
     if(user.id === reviews.user_id) {
         reviews.destroy();
-        return res.status(200).json('Successfully deleted');
-    };
+        return res.status(200).json( {message: 'Successfully deleted'});
+    } else return res.status(403).json({ message: "Forbidden!"});
 
 });
 

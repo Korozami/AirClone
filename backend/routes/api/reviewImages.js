@@ -7,8 +7,10 @@ const { requireAuth } = require('../../utils/auth');
 
 router.delete('/:id', requireAuth, async (req, res, next) => {
     const id = req.params.id;
-
+    const user = req.user;
     const reviewImage = await ReviewImages.findByPk(id);
+    const reviewId = reviewImage.review_id;
+    const reviews = await Review.findByPk(reviewId);
 
 
     if(!reviewImage) {
@@ -17,9 +19,10 @@ router.delete('/:id', requireAuth, async (req, res, next) => {
         return next(err);
     };
 
-    await reviewImage.destroy();
-
-    return res.status(200).json({ message: 'Successfully deleted'});
+    if(user.id === reviews.user_id) {
+        reviewImage.destroy();
+        return res.status(200).json({ message: 'Successfully deleted'});
+    } else return res.status(403).json({ message: "Forbidden!"});
 });
 
 module.exports = router;
