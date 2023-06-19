@@ -138,7 +138,7 @@ router.get('/', async (req, res, next) => {
             'previewImage'
         ],
 
-        group: ['Spot.Id'],
+        group: ['Spot.id'],
 
     });
 
