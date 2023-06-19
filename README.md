@@ -160,7 +160,7 @@ user's information.
 * Require Authentication: false
 * Request
   * Method: POST
-  * URL: "/user"
+  * URL: "/users"
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -1098,7 +1098,7 @@ Create and return a new booking from a spot specified by id.
 * Require proper authorization: Spot must NOT belong to the current user
 * Request
   * Method: POST
-  * URL: "spots/:spotid/booking"
+  * URL: "spots/:spotid/bookings"
   * Body:
 
     ```json

@@ -34,7 +34,7 @@ router.get('/current', requireAuth, async (req, res) => {
                 attributes: ["review_id", "url"],
             }
         ],
-        group: ['User.id','Spot.id','ReviewImages.id']
+        group: ['Review.id','User.id','Spot.id','ReviewImages.id']
     });
 
     return res.status(200).json({ Reviews: reviews })
