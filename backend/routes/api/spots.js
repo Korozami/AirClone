@@ -158,10 +158,10 @@ router.get('/current', requireAuth, async (req, res, next) => {
           model: Review,
           attributes: []
         },
-        {
-            model: SpotImages,
-            attributes: ["id", "url", "preview"],
-        },
+        // {
+        //     model: SpotImages,
+        //     attributes: ["id", "url", "preview"],
+        // },
       ],
       attributes: {
         include: [
@@ -178,6 +178,21 @@ router.get('/:spotId', requireAuth, async (req, res, next) => {
     const spotid = req.params.spotId;
 
     const spots = await Spot.findByPk(spotid, {
+            include: [
+        {
+            model: Review,
+            attributes: [],
+        },
+        {
+            model: SpotImages,
+            attributes: ['id', 'url', 'preview'],
+        },
+        {
+            model: User,
+            as: 'Owner',
+            attributes: ['id', 'firstName', 'lastName']
+        }
+    ],
         attributes: {
             include: [
             'id',
@@ -193,25 +208,11 @@ router.get('/:spotId', requireAuth, async (req, res, next) => {
             'price',
             'createdAt',
             'updatedAt',
-            [Sequelize.fn('AVG', Sequelize.col('Reviews.stars')), 'avgRating'],
-            [Sequelize.fn('AVG', Sequelize.col('Reviews.id')), 'numReviews']
+            [Sequelize.fn('AVG', Sequelize.col('Reviews.id')), 'numReviews'],
+            [Sequelize.fn('AVG', Sequelize.col('Reviews.stars')), 'avgRating']
         ],
     },
-        include: [
-            {
-                model: Review,
-                attributes: ['id', 'spotId'],
-            },
-            {
-                model: SpotImages,
-                attributes: ['id', 'url', 'preview'],
-            },
-            {
-                model: User,
-                as: 'Owner',
-                attributes: ['id', 'firstName', 'lastName']
-            }
-        ],
+
         group: ['Spot.id', 'Owner.id', 'SpotImages.id'],
     });
 
