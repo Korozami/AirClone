@@ -441,7 +441,7 @@ router.get('/:spotId', requireAuth, async (req, res, next) => {
                 attributes: ['id', 'firstName', 'lastName']
             }
         ],
-        group: ['Spot.Id', 'Owner.id', 'SpotImages.id'],
+        group: ['Spot.id', 'Owner.id', 'SpotImages.id'],
     });
 
     if(!spots) {
